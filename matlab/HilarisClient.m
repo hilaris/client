@@ -19,11 +19,19 @@ classdef HilarisClient
         end
         
         function connect(obj)
-          obj.client.connect(obj.path, obj.port);
+          obj.connected = obj.client.connect(obj.path, obj.port);
         end
         
         function disconnect(obj)
-            obj.connected = obj.client.disconnect();
+            if(obj.client.disconnect())
+                obj.connected = 0;
+            else
+                obj.connected = 1;
+            end
+        end
+        
+        function setShutterWidth(obj, width)
+           obj.client.setShutterWidth(width); 
         end
         
         function setImageType(obj, type, width, height)

@@ -1,6 +1,6 @@
 javaaddpath('/home/km/Desktop/streamclient.jar');
 client = ch.zhaw.hilaris.StreamClient();
-client.connect('192.168.1.10', 9003);
+client.connect('stud-kreismic-1', 9003);
 
 thres = 10;
 run = 1;
