@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class StreamClient {
 		this.imgWidth = 752/2;
 		this.imgHeight = 480/2;
 		this.msgSize = this.imgWidth * this.imgHeight;
-		this.imgType = BufferedImage.TYPE_BYTE_GRAY;
+		this.imgType = BufferedImage.TYPE_3BYTE_BGR;
 		this.type = ImageType.GREY_HALFSIZE;
 	}
 	
