@@ -1,45 +1,26 @@
 javaaddpath('/home/km/Desktop/streamclient.jar');
-client = ch.zhaw.hilaris.StreamClient();
-client.connect('stud-kreismic-1', 9003);
+client = HilarisClient('stud-kreismic-1', 9003);
+client.connect();
 
 thres = 10;
 run = 1;
 
-javaImage = client.getImage();
 
-% get image properties
-H=javaImage.getHeight;
-W=javaImage.getWidth;
-
-bg = uint8(zeros([H,W]));
-pixelsData = uint8(javaImage.getData.getPixels(0,0,W,H,[]));
-for i = 1 : H
-    base = (i-1)*W + 1;
-    bg(i,1:W) = pixelsData(base:(base+W-1));
-end
+bg = client.getImageData();
 
 while run
-    javaImage = client.getImage();
+    frame = client.getImageData();
 
     % get image properties
-    H=javaImage.getHeight;
-    W=javaImage.getWidth;
-
-    % repackage as an array (MATLAB image format)
-    B = uint8(zeros([H,W]));
-    pixelsData = uint8(javaImage.getData.getPixels(0,0,W,H,[]));
-    for i = 1 : H
-        base = (i-1)*W + 1;
-        B(i,1:W) = pixelsData(base:(base+W-1));
-    end
+    [H,W] = size(frame);
     
     diff = uint8(zeros([H,W]));
     
     for j=1:H
         for k=1:W
-            if(B(j,k)+thres>bg(j,k))
+            if(frame(j,k)+thres>bg(j,k))
                 bg(j,k) = bg(j,k)+1;
-            elseif (B(j,k)-thres<bg(j,k))
+            elseif (frame(j,k)-thres<bg(j,k))
                 bg(j,k) = bg(j,k)-1;
             end
             
@@ -47,11 +28,11 @@ while run
         end
     end
     
-    diff = imabsdiff(bg, B);
-    % display image
-    %imshow(imsubtract(B, bg));
+    diff = imabsdiff(bg, frame);
+    
+    %display the images
     fig = figure(1);
-    subplot(2,2,1),imshow(B) 
+    subplot(2,2,1),imshow(frame) 
     subplot(2,2,2),imshow(bg)
     subplot(2,2,3),imshow(diff) 
     sedisk = strel('disk', 1);
